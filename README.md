@@ -8,11 +8,19 @@ OpenAPI(v3) => Markdown
 - You can use 'yaml' as input files.
 - The reference does not resolve the second reference because it avoids recursion.
 
+## install
+> npm install -g
+
+If exception, run:
+> npm cache verify 
+
 ## usage
 
-Usage: openapi-to-md <source> [destination]
+Usage: api-to-md [-t tag] ＜source＞ [destination]
 
 Example:
 ```sh
-openapi-to-md openapi.yaml README.md
+api-to-md openapi.yaml README.md
+or
+api-to-md -t atag,btag openapi.yaml README.md
 ```

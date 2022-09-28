@@ -14,11 +14,12 @@ class Document {
   components = {}
   security = []
 
-  constructor (content) {
+  constructor (content, outputTags) {
     this.openapi = content.openapi
     this.info = content.info
     this.servers = content.servers
     this.tags = content.tags
+    this.outputTags = outputTags
     this.security = content.security
     this.components = content.components
     this.content = content
@@ -31,6 +32,12 @@ class Document {
       for (let path in pathsContent) {
         for (let method in pathsContent[path]) {
           this.paths = this.paths || []
+          if (Array.isArray(this.outputTags)) {
+            let pathTags = pathsContent[path][method].tags
+            if(this.outputTags.filter(v => pathTags.includes(v)).length <= 0) {
+              continue
+            }
+          }
           this.paths.push(new Path({
             ...pathsContent[path][method],
             path, method
