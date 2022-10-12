@@ -27,8 +27,8 @@ class RequestBody {
     let examples = []
     for (let key in this.content) {
       let example = this.content[key].example
-      if (!example && this.content[key]?.schema?.example) {
-        example = this.content[key].schema.example
+      if (!example && this.content[key].schema) {
+        example = this.content[key].schema.getExample()
       }
       if (example) {
         let exampleItem = '- 请求示例(' + key + ')\n\n'
