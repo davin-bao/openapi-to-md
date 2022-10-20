@@ -20,6 +20,11 @@ class Path {
     this.operationId = content.operationId
     this.anchor = this.method.toLowerCase() + '-' + this.convertPath(this.path)
 
+    if (content.deprecated) {
+      this.path = '~~' + this.path + '~~'
+      this.summary = '[弃用]' + this.summary
+    }
+
     // initParameters
     let parameters = content['parameters']
     if (parameters) {
@@ -47,9 +52,14 @@ class Path {
       .toLowerCase()
   }
 
+  getTableInfo () {
+    let summary = this.summary || this.description
+    return '| ' + this.method.toUpperCase() + ' | [' + this.path + '](#' + this.anchor + ') | ' + summary + ' |'
+  }
+
   getInfo () {
     let description = this.description
-    let output = '### [' + this.method.toUpperCase() + '] ' + this.path + ' \n ' + this.summary + '\n\n'
+    let output = '### [' + this.method.toUpperCase() + '] ' + this.path + ' \n ' + this.summary + ' \n\n operationId: ' + this.operationId + '\n\n'
     if(description) {
       output += '描述: ' + description + '\n\n'
     }

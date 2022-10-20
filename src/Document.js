@@ -97,8 +97,7 @@ class Document {
     let head = '| Method | Path | Description |\n| --- | --- | --- |\n'
     let body = []
     for (let path of this.getPaths()) {
-      let summary = path.summary || path.description
-      body.push('| ' + path.method.toUpperCase() + ' | [' + path.path + '](#' + path.anchor + ') | ' + summary + ' |')
+      body.push(path.getTableInfo())
     }
     return title + head + body.join('\n') + '\n\n'
   }
