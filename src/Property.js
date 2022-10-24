@@ -19,7 +19,9 @@ class Property {
       let ref = this.items['$ref']
       if (ref != parent.ref) {
         let reference = new Reference(ref)
-        this.items = new Schema(reference.doc, ref)
+        if(reference.doc){
+          this.items = new Schema(reference.doc, ref)
+        }
       }
     }
   }

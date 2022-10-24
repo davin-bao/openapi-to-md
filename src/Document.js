@@ -13,6 +13,7 @@ class Document {
   parameters = {}
   components = {}
   security = []
+  keys = []
 
   constructor (content, outputTags) {
     this.openapi = content.openapi
@@ -23,6 +24,7 @@ class Document {
     this.security = content.security
     this.components = content.components
     this.content = content
+    this.keys = Object.keys((content.components || {}).schemas || {});
     Document.dir = content.dir
   }
   getPaths () {
@@ -115,9 +117,11 @@ class Document {
     let body = []
     let schemas = Document.getSchemas()
     for (let key in schemas) {
-      schemas[key].name = key
-      let schema = Schema.getIns(schemas[key])
-      body.push(schema.getDetail())
+      if(this.keys.indexOf(key)!=-1){
+        schemas[key].name = key
+        let schema = Schema.getIns(schemas[key])
+        body.push(schema.getDetail())
+      }
     }
     return title + body.join('\n\n');
   }
