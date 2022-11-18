@@ -19,8 +19,9 @@ class Path {
     this.description = content.description
     this.operationId = content.operationId
     this.anchor = this.method.toLowerCase() + '-' + this.convertPath(this.path)
-
+    this.deprecated = false
     if (content.deprecated) {
+      this.deprecated = true
       this.path = '~~' + this.path + '~~'
       this.summary = '[弃用]' + this.summary
     }
@@ -96,13 +97,28 @@ class Path {
     }
 
   getResponseDetailInfo () {
-      let title = '#### 返回数据结构\n\n'
-      let body = []
-      for (let responsesBody of this.responses) {
-        body.push(responsesBody.getInfo())
-      }
-      return title + body.join('\n') + '\n\n'
+    let title = '#### 返回数据结构\n\n'
+    let body = []
+    for (let responsesBody of this.responses) {
+      body.push(responsesBody.getInfo())
     }
+    return title + body.join('\n') + '\n\n'
+  }
+
+  getCsvRow () {
+    let parameters = []
+    for (let parameter of this.parameters) {
+      parameters.push(parameter.name + '=' + parameter.getExample().replace(/\"/g, "'"))
+    }
+
+    let reqBody = ""
+    if (this.requestBody) {
+      reqBody = JSON.stringify(this.requestBody.getJsonExample())
+      reqBody = reqBody.replace(/\"/g, "'")
+    }
+
+    return this.method + ',"' + this.path + '","' + parameters.join('&') + '","' + reqBody + '"'
+  }
 }
 
 export default Path

@@ -17,12 +17,11 @@ class Parameter {
   }
   getRow () {
     let type = this.schema?.getTypeByRow()
-    let example = (typeof(this.example) !== 'string') ? JSON.stringify(this.example) : this.example
+    let example = this.getExample()
     let bounds = ' '
     let description = this.description
     if (this.schema) {
       bounds = this.schema.getBounds()
-      if (!example) example = this.schema.default ? this.schema.default + '' : false
       description = this.schema.description || this.description
     }
 
@@ -36,6 +35,13 @@ class Parameter {
       (description || ' ')
     ]
     return '|' + cells.join('|') + '|'
+  }
+  getExample () {
+    let example = (typeof(this.example) !== 'string') ? JSON.stringify(this.example) : this.example
+    if (this.schema) {
+      if (!example) example = this.schema.default ? this.schema.default + '' : false
+    }
+    return example || ' ';
   }
 }
 Parameter.getTableHead = () => {

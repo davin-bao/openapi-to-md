@@ -4,7 +4,7 @@ import { program } from "commander"
 import fs from "fs"
 import Document from "./Document.js"
 
-export const convertMarkdown = async function (source, dest, tags) {
+export const convertMarkdown = async function (source, dest, tags, csv) {
   let index = source.lastIndexOf('\\')
   index = index > 0 ? index : source.lastIndexOf('/')
   let dir = source.substr(0, index + 1)
@@ -15,9 +15,15 @@ export const convertMarkdown = async function (source, dest, tags) {
   if (!document) return
   document.dir = dir
   const doc = new Document(document, tags)
-  const output = doc.getOutput()
-  const version = doc.getVersion()
-  dest += (version ? ('.' + version) : '') + '.md'
+  let output = ''
+    const version = doc.getVersion()
+  if (csv) {
+    output = doc.getCsv()
+    dest += (version ? ('.' + version) : '') + '.csv'
+  } else {
+    output = doc.getOutput()
+    dest += (version ? ('.' + version) : '') + '.md'
+  }
   if (dest) {
     fs.promises.writeFile(dest, output, "utf8")
   } else {
@@ -29,8 +35,10 @@ program
   .version(process.env.npm_package_version || "unknown")
   .arguments("<source> [destination]")
   .option('-t, --tag <tags>', 'Split with "," give multi tags')
+  .option('--csv', 'Export to csv file')
   .action((src, dest) => {
     let tags = program.opts().tag
-    convertMarkdown(src, dest, tags)
+    let csv = program.opts().csv
+    convertMarkdown(src, dest, tags, csv)
   })
 program.parse(process.argv)

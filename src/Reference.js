@@ -16,6 +16,7 @@ class Reference {
     this.doc = Document.searchDocs(this._source, this._path)
     if (this.doc) {
       this.doc.name = this._path[this._path.length - 1]
+      Document.schemaNames.push(this.doc.name)
     }
   }
 }

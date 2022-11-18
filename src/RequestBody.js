@@ -23,6 +23,18 @@ class RequestBody {
     }
     return row
   }
+  getJsonExample() {
+    for (let key in this.content) {
+      if (key == 'application/json') {
+        let example = this.content[key].example
+        if (!example && this.content[key].schema) {
+          example = this.content[key].schema.getExample()
+        }
+        if (example) return example
+      }
+    }
+    return {}
+  }
   getExamplesInfo () {
     let examples = []
     for (let key in this.content) {

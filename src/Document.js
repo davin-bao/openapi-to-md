@@ -13,7 +13,6 @@ class Document {
   parameters = {}
   components = {}
   security = []
-  keys = []
 
   constructor (content, outputTags) {
     this.openapi = content.openapi
@@ -24,7 +23,6 @@ class Document {
     this.security = content.security
     this.components = content.components
     this.content = content
-    this.keys = Object.keys((content.components || {}).schemas || {});
     Document.dir = content.dir
   }
   getPaths () {
@@ -74,6 +72,7 @@ class Document {
     return title + head + body.join('\n') + '\n\n'
   }
   getSecurity () {
+    if (!this.security) return ''
     let title = '## Securities\n\n'
     let body = []
     for (let security of this.security) {
@@ -117,11 +116,11 @@ class Document {
     let body = []
     let schemas = Document.getSchemas()
     for (let key in schemas) {
-      if(this.keys.indexOf(key)!=-1){
-        schemas[key].name = key
-        let schema = Schema.getIns(schemas[key])
-        body.push(schema.getDetail())
-      }
+      // 当前文档未用到的Schema将不输出
+      if(Document.schemaNames.indexOf(key) < 0) continue
+      schemas[key].name = key
+      let schema = Schema.getIns(schemas[key])
+      body.push(schema.getDetail())
     }
     return title + body.join('\n\n');
   }
@@ -134,9 +133,19 @@ class Document {
       this.getPathInfo() +
       this.getSchema()
   }
+  getCsv () {
+    let title = 'method, path, queryStr, requestBody\n'
+    let body = []
+    for (let path of this.getPaths()) {
+      if (path.deprecated) continue
+      body.push(path.getCsvRow())
+    }
+    return title + body.join('\n');
+  }
 }
 Document.dir = ''
 Document.instances = {}
+Document.schemaNames = []
 
 Document.searchDocs = (source, paths) => {
   Document.readDocument(source)
