@@ -43,6 +43,23 @@ class Parameter {
     }
     return example || ' ';
   }
+  getQueryExample() {
+    let example = this.example
+    if (this.schema) {
+      if (!example) example = this.schema.default ? this.schema.default + '' : false
+    }
+
+    if (Array.isArray(this.example)) {
+      example = ''
+      for (let ex of this.example) {
+        example += '&' + this.name + '=' + ex
+      }
+    } else {
+      example = this.name + '=' + example
+    }
+    
+    return example || ' ';
+  }
 }
 Parameter.getTableHead = () => {
   return '|名称|位置|类型|必选|约束|示例|说明|\n|---|---|---|---|---|---|---|\n'

@@ -108,7 +108,7 @@ class Path {
   getCsvRow () {
     let parameters = []
     for (let parameter of this.parameters) {
-      parameters.push(parameter.name + '=' + parameter.getExample().replace(/\"/g, "'"))
+      parameters.push(parameter.getQueryExample().replace(/\"/g, "'"))
     }
 
     let reqBody = ""

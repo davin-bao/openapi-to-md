@@ -134,7 +134,7 @@ class Document {
       this.getSchema()
   }
   getCsv () {
-    let title = 'method, path, queryStr, requestBody\n'
+    let title = 'method,path,queryStr,requestBody\n'
     let body = []
     for (let path of this.getPaths()) {
       if (path.deprecated) continue
