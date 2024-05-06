@@ -180,7 +180,7 @@ Document.readDocument = (source) => {
     Document.instances[source] = document
     return document
   } catch (e) {
-    console.warn('Can\'t find file ' + Document.dir + source)
+    console.error(e)
   }
   return null
 }

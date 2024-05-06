@@ -86,7 +86,7 @@ class Schema {
   }
 
   getRequestRow () {
-    return '|*anonymous*|body|' + this.getTypeByRow() + '| true | | | ' + (this.description || '') + '|'
+    return '|*anonymous*|body|' + this.getTypeByRow() + '| true | ' + this.getBounds() +' | | ' + (this.description || '') + '|'
   }
 
   getTypeByRow () {
