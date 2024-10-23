@@ -15,6 +15,7 @@ class Reference {
     this._refType = this._path[this._path.length - 2]
     this.doc = Document.searchDocs(this._source, this._path)
     if (this.doc) {
+      this.doc._name = this.doc._name || this.doc.name
       this.doc.name = this._path[this._path.length - 1]
       Document.schemaNames.push(this.doc.name)
     }
