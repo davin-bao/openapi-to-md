@@ -16,6 +16,7 @@ class Parameter {
     }
   }
   getRow () {
+    let name = this._name || this.name
     let type = this.schema?.getTypeByRow()
     let example = this.getExample()
     let bounds = ' '
@@ -26,7 +27,7 @@ class Parameter {
     }
 
     let cells = [
-      this.name,
+      name,
       this.in,
       type,
       (this.required || 'false'),
@@ -37,6 +38,7 @@ class Parameter {
     return '|' + cells.join('|') + '|'
   }
   getExample () {
+    let name = this._name || this.name
     let example = (typeof(this.example) !== 'string') ? JSON.stringify(this.example) : this.example
     if (this.schema) {
       if (!example) example = this.schema.default ? this.schema.default + '' : false
@@ -52,10 +54,10 @@ class Parameter {
     if (Array.isArray(this.example)) {
       example = ''
       for (let ex of this.example) {
-        example += '&' + this.name + '=' + ex
+        example += '&' + name + '=' + ex
       }
     } else {
-      example = this.name + '=' + example
+      example = name + '=' + example
     }
     
     return example || ' ';
