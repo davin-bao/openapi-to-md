@@ -38,14 +38,20 @@ class RequestBody {
   getExamplesInfo () {
     let examples = []
     for (let key in this.content) {
-      let example = this.content[key].example
-      if (!example && this.content[key].schema) {
-        example = this.content[key].schema.getExample()
-      }
-      if (example) {
-        let exampleItem = '- 请求示例(' + key + ')\n\n'
-        exampleItem += '```json\n' + JSON.stringify(example, null, 2) + '\n```\n'
-        examples.push(exampleItem)
+      if (this.content[key].examples) {
+        let reqExamples = this.content[key].examples
+        for (let key in reqExamples) {
+          let exampleItem = '- 请求示例(' + key + ')\n\n'
+          exampleItem += '```json\n' + JSON.stringify(reqExamples[key].value, null, 2) + '\n```\n'
+          examples.push(exampleItem)
+        }
+      } else if (this.content[key].schema) {
+        let example = this.content[key].schema.getExample()
+        if (example) {
+          let exampleItem = '- 请求示例(' + key + ')\n\n'
+          exampleItem += '```json\n' + JSON.stringify(example, null, 2) + '\n```\n'
+          examples.push(exampleItem)
+        }
       }
     }
     return examples
