@@ -182,8 +182,12 @@ class ArraySchema extends Schema {
   }
   
   getExample () {
-    if (!this.items.getExample) console.log(this)
-    let example = this.items.getExample()
+    let example = ''
+    if (typeof this.items.getExample === 'function') {
+      example = this.items.getExample()
+    } else {
+      console.log(this)
+    }
     return example ? [ example ] : null
   }
 }
