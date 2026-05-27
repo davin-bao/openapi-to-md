@@ -53,7 +53,7 @@ class Document {
   }
   getInfo () {
     let { title, description, version } = this.info
-    description = typeof(description) === 'string' ? this.replaceAll('\\n', '\n', description) : ''
+    description = typeof(description) === 'string' ? this.replaceAll('\\n', '\n', description).replace(/^[ \t]+(?=.*\|)/gm, '') : ''
     return '# ' + (title || '') + '\n\n' + 
     '> v' + (version || '') + '\n\n' + 
     (description || '') + '\n\n'
